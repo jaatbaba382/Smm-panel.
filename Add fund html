@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Funds</title>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+</head>
+<body>
+  <h2>Add Funds</h2>
+  <p>Send money to this UPI ID:</p>
+  <h3><b>tuyoupay@upi</b></h3> <!-- Yahan apna UPI ID daalna -->
+
+  <form id="fundForm">
+    <input type="number" id="amount" placeholder="Enter amount sent (₹)" required><br><br>
+    <input type="text" id="txnId" placeholder="Enter UPI Transaction ID" required><br><br>
+    <button type="submit">Submit Request</button>
+  </form>
+
+  <p id="message"></p>
+
+  <script>
+    // Firebase Config (replace with yours)
+    const firebaseConfig = {
+      apiKey: "TERA_API_KEY",
+      authDomain: "TERA_PROJECT_ID.firebaseapp.com",
+      projectId: "TERA_PROJECT_ID",
+      appId: "TERA_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+
+    document.getElementById('fundForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('amount').value);
+      const txnId = document.getElementById('txnId').value;
+      const user = auth.currentUser;
+
+      if (user) {
+        await db.collection('fundRequests').add({
+          uid: user.uid,
+          email: user.email,
+          amount: amount,
+          txnId: txnId,
+          status: "pending",
+          timestamp: new Date()
+        });
+
+        document.getElementById('message').innerText = "Payment request submitted. Admin will verify and add balance.";
+        document.getElementById('fundForm').reset();
+      }
+    });
+  </script>
+</body>
+</html>
