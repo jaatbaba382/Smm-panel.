@@ -62,3 +62,8 @@
       .catch((err) => alert(err.message));
   });
 </script>
+<form id="signupForm">
+  <input type="email" id="email" placeholder="Email" required />
+  <input type="password" id="password" placeholder="Password" required />
+  <button type="submit">Sign Up</button>
+</form>
