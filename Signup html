@@ -32,3 +32,33 @@
   </script>
 </body>
 </html>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyGC6MKvCtvAvNC0Vz9C86mfFeDNhHXdKE",
+    authDomain: "smm-panel-1c7c4.firebaseapp.com",
+    projectId: "smm-panel-1c7c4",
+    storageBucket: "smm-panel-1c7c4.appspot.com",
+    messagingSenderId: "474222165775",
+    appId: "1:474222165775:web:3a9153a37dc4632bb2087a"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  document.getElementById("signupForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const pass = document.getElementById("password").value;
+
+    createUserWithEmailAndPassword(auth, email, pass)
+      .then(() => {
+        alert("Signup successful!");
+        window.location.href = "login.html";
+      })
+      .catch((err) => alert(err.message));
+  });
+</script>
